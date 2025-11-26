@@ -1,0 +1,29 @@
+name: Docker Build Playground
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Show Docker version
+        run: docker version
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-app:${{ github.sha }} .
+
+      - name: List Docker images
+        run: docker images | head
+
+      - name: Run container
+        run: |
+          docker run --rm my-app:${{ github.sha }}
